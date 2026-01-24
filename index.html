@@ -8,13 +8,12 @@
         :root { --blue-p: #004a99; --gold-r: #f39c12; --danger: #e74c3c; }
         body, html { margin: 0; padding: 0; height: 100%; font-family: 'Segoe UI', sans-serif; background: #fff; display: flex; justify-content: center; align-items: center; }
         
-        /* Pantalla de Bloqueo */
+        /* Acceso de Seguridad */
         #bloqueo { text-align: center; padding: 40px; border: 1px solid #eee; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); background: white; z-index: 10; width: 350px; }
         .input-pass { padding: 15px; border-radius: 8px; border: 1px solid #ccc; width: 100%; box-sizing: border-box; font-size: 1.1rem; text-align: center; margin-bottom: 20px; outline: none; }
-        .btn-verificar { width: 100%; padding: 15px; background: var(--blue-p); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 1rem; transition: 0.3s; }
-        .btn-verificar:hover { background: #003366; }
+        .btn-verificar { width: 100%; padding: 15px; background: var(--blue-p); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 1rem; }
 
-        /* Contenedor del Laboratorio */
+        /* Contenedor Original */
         #laboratorio-completo { display: none; width: 100%; height: 100vh; grid-template-columns: 1fr 1fr; }
         
         .left { background: #f8fafc; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 40px; border-right: 1px solid #eee; }
@@ -25,7 +24,6 @@
 
         .item-card { background: white; border: 1px solid #e2e8f0; padding: 25px; border-radius: 12px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; border-left: 6px solid #cbd5e1; }
         
-        /* Animación Pulso para Píldoras Nuevas */
         .pildora-nueva { 
             border-left: 6px solid var(--danger) !important; 
             animation: pulso 2s infinite; 
@@ -36,14 +34,13 @@
             100% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0); }
         }
 
-        .btn-action { text-decoration: none; color: white; background: #1e293b; padding: 12px 25px; border-radius: 8px; font-weight: bold; transition: 0.3s; }
-        .btn-action:hover { background: var(--blue-p); }
+        .btn-action { text-decoration: none; color: white; background: #1e293b; padding: 12px 25px; border-radius: 8px; font-weight: bold; }
     </style>
 </head>
 <body>
 
     <audio id="bgMusic" loop>
-        <source src="ambiente.mp3" type="audio/mpeg">
+        <source src="https://drive.google.com/uc?export=download&id=TU_ID_AQUI" type="audio/mpeg">
     </audio>
 
     <div id="bloqueo">
@@ -58,7 +55,7 @@
             <video id="resiVideo" controls onended="reproducirMusica()">
                 <source src="resi.mp4" type="video/mp4">
             </video>
-            <p style="margin-top:20px; font-weight:bold; color: #334155;">RESI: Briefing Estratégico</p>
+            <p style="margin-top:20px; font-weight:bold;">RESI: Briefing Estratégico</p>
         </div>
 
         <div class="right">
@@ -102,7 +99,7 @@
         }
 
         function reproducirMusica() {
-            music.volume = 0.25; 
+            music.volume = 0.3; 
             music.play();
         }
     </script>
