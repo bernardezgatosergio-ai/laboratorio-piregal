@@ -13,51 +13,29 @@
         .btn-verificar { width: 100%; padding: 15px; background: var(--blue-p); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 1rem; }
 
         #laboratorio-completo { display: none; width: 100%; height: 100vh; grid-template-columns: 1fr 1.5fr; }
-        
         .left { background: #f8fafc; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 40px; border-right: 1px solid #eee; }
         video { width: 100%; max-width: 550px; border-radius: 15px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); background: #000; }
-        
         .right { padding: 60px; overflow-y: auto; background: #fff; box-sizing: border-box; }
         h1 { color: var(--blue-p); font-size: 2.5rem; margin-bottom: 30px; }
 
         .item-card { 
-            background: white; 
-            border: 1px solid #e2e8f0; 
-            padding: 30px; 
-            border-radius: 15px; 
-            margin-bottom: 25px; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: flex-start;
-            border-left: 10px solid #cbd5e1; 
-            transition: 0.3s;
+            background: white; border: 1px solid #e2e8f0; padding: 30px; border-radius: 15px; margin-bottom: 25px; 
+            display: flex; flex-direction: column; align-items: flex-start; border-left: 10px solid #cbd5e1; 
         }
-        
         .info-container { width: 100%; margin-bottom: 15px; }
-
         .pildora-nueva { border-left: 10px solid var(--danger) !important; animation: pulso 2s infinite; }
         @keyframes pulso {
             0% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.4); }
             70% { box-shadow: 0 0 0 15px rgba(231, 76, 60, 0); }
             100% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0); }
         }
-
-        .btn-action { 
-            text-decoration: none; 
-            color: white; 
-            background: #1e293b; 
-            padding: 15px 40px; 
-            border-radius: 8px; 
-            font-weight: bold; 
-            display: inline-block;
-            align-self: flex-end; 
-        }
+        .btn-action { text-decoration: none; color: white; background: #1e293b; padding: 15px 40px; border-radius: 8px; font-weight: bold; align-self: flex-end; }
     </style>
 </head>
 <body>
 
     <audio id="bgMusic" loop preload="auto">
-        <source src="https://docs.google.com/uc?export=download&id=1nCVW0qZRRyDM97l2wIxHkB1_7PVsW1Nh" type="audio/mpeg">
+        <source src="https://docs.google.com/uc?export=open&id=1nCVW0qZRRyDM97l2wIxHkB1_7PVsW1Nh" type="audio/mpeg">
     </audio>
 
     <div id="bloqueo">
@@ -73,10 +51,8 @@
             </video>
             <p style="margin-top:20px; font-weight:bold;">RESI: Briefing Estratégico</p>
         </div>
-
         <div class="right">
             <h1>Panel de Control</h1>
-            
             <div class="item-card pildora-nueva">
                 <div class="info-container">
                     <span style="font-size: 0.8rem; color: var(--danger); font-weight: bold;">● NOVEDAD</span>
@@ -84,14 +60,12 @@
                 </div>
                 <a href="https://drive.google.com/uc?export=view&id=1d5RDRPoI3cnpQoR1Pn89vdUCt-TKOYnN" target="_blank" class="btn-action">ABRIR PDF</a>
             </div>
-
             <div class="item-card">
                 <div class="info-container">
                     <div style="font-size: 1.2rem; font-weight: bold; color: #1e293b;">P02 - Infraestructura y Células</div>
                 </div>
                 <a href="https://drive.google.com/uc?export=view&id=15ZUmLkTzVDPV72WZkhthF9WnBxPryJ9u" target="_blank" class="btn-action">ABRIR PDF</a>
             </div>
-
             <div class="item-card">
                 <div class="info-container">
                     <div style="font-size: 1.2rem; font-weight: bold; color: #1e293b;">P01 - Gestión y Control de Rentabilidad</div>
@@ -108,11 +82,15 @@
         function verificar() {
             const clave = document.getElementById('pass').value;
             if(clave === "Piregal2026") {
+                // Truco de UX: Preparamos el audio en silencio para ganar el permiso del navegador
+                music.play().then(() => {
+                    music.pause();
+                    music.currentTime = 0;
+                }).catch(e => console.log("Permiso de audio pendiente"));
+
                 document.getElementById('bloqueo').style.display = 'none';
                 document.body.style.display = 'block'; 
                 document.getElementById('laboratorio-completo').style.display = 'grid';
-                // Intentamos precargar la música al entrar
-                music.load();
                 video.play();
             } else {
                 alert("Clave incorrecta.");
@@ -120,16 +98,8 @@
         }
 
         function reproducirMusica() {
-            music.volume = 0.4; 
-            var playPromise = music.play();
-            
-            if (playPromise !== undefined) {
-                playPromise.catch(error => {
-                    console.log("El navegador bloqueó el audio. Intentando re-arranque.");
-                    // Si falla, lo intentamos al primer clic que haga en la página
-                    document.addEventListener('click', () => { music.play(); }, {once: true});
-                });
-            }
+            music.volume = 0.35; 
+            music.play();
         }
     </script>
 </body>
