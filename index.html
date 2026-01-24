@@ -5,101 +5,116 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Laboratorio Piregal 2026</title>
     <style>
-        :root { --blue-p: #004a99; --gold-r: #f39c12; --danger: #e74c3c; }
-        body, html { margin: 0; padding: 0; height: 100%; font-family: 'Segoe UI', sans-serif; background: #fff; display: flex; justify-content: center; align-items: center; }
+        :root { --blue-p: #004a99; --danger: #e74c3c; --bg: #f8fafc; }
+        body, html { margin: 0; padding: 0; min-height: 100%; font-family: 'Segoe UI', sans-serif; background: #fff; color: #1e293b; }
         
-        #bloqueo { text-align: center; padding: 40px; border: 1px solid #eee; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); background: white; z-index: 10; width: 350px; }
-        .input-pass { padding: 15px; border-radius: 8px; border: 1px solid #ccc; width: 100%; box-sizing: border-box; font-size: 1.1rem; text-align: center; margin-bottom: 20px; outline: none; }
-        .btn-verificar { width: 100%; padding: 15px; background: var(--blue-p); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 1rem; }
+        /* Pantalla de Bloqueo */
+        #bloqueo { display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; text-align: center; padding: 20px; box-sizing: border-box; }
+        .input-pass { padding: 15px; border-radius: 8px; border: 1px solid #ccc; width: 100%; max-width: 300px; font-size: 1.1rem; text-align: center; margin-bottom: 20px; outline: none; }
+        .btn-verificar { width: 100%; max-width: 300px; padding: 15px; background: var(--blue-p); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
 
-        #laboratorio-completo { display: none; width: 100%; height: 100vh; grid-template-columns: 1fr 1.5fr; }
-        .left { background: #f8fafc; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 40px; border-right: 1px solid #eee; }
-        video { width: 100%; max-width: 550px; border-radius: 15px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); background: #000; }
-        .right { padding: 60px; overflow-y: auto; background: #fff; box-sizing: border-box; }
-        h1 { color: var(--blue-p); font-size: 2.5rem; margin-bottom: 30px; }
+        /* Contenedor Principal Responsive */
+        #laboratorio-completo { display: none; flex-direction: column; min-height: 100vh; }
+        
+        /* Video Section */
+        .left { background: #000; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px; }
+        video { width: 100%; max-width: 600px; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        .video-label { color: #fff; margin-top: 10px; font-size: 0.9rem; font-weight: bold; }
 
+        /* Panel de Píldoras Compacto */
+        .right { padding: 20px; box-sizing: border-box; background: #fff; }
+        h1 { color: var(--blue-p); font-size: 1.8rem; margin: 10px 0 20px 0; border-bottom: 2px solid var(--bg); padding-bottom: 10px; }
+
+        /* Píldoras Estilo Línea */
         .item-card { 
-            background: white; border: 1px solid #e2e8f0; padding: 30px; border-radius: 15px; margin-bottom: 25px; 
-            display: flex; flex-direction: column; align-items: flex-start; border-left: 10px solid #cbd5e1; 
+            background: var(--bg); border: 1px solid #e2e8f0; padding: 12px 15px; border-radius: 8px; margin-bottom: 10px; 
+            display: flex; justify-content: space-between; align-items: center; border-left: 6px solid #cbd5e1; transition: 0.2s;
         }
-        .info-container { width: 100%; margin-bottom: 15px; }
-        .pildora-nueva { border-left: 10px solid var(--danger) !important; animation: pulso 2s infinite; }
+        .info-container { flex: 1; padding-right: 15px; overflow: hidden; }
+        .info-title { font-size: 1rem; font-weight: bold; color: #334155; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .new-tag { font-size: 0.65rem; color: var(--danger); font-weight: bold; display: block; margin-bottom: 2px; }
+
+        .pildora-nueva { border-left-color: var(--danger) !important; animation: pulso 2s infinite; }
         @keyframes pulso {
-            0% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.4); }
-            70% { box-shadow: 0 0 0 15px rgba(231, 76, 60, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0); }
+            0% { background: var(--bg); }
+            50% { background: #fff1f0; }
+            100% { background: var(--bg); }
         }
-        .btn-action { text-decoration: none; color: white; background: #1e293b; padding: 15px 40px; border-radius: 8px; font-weight: bold; align-self: flex-end; }
+
+        .btn-action { text-decoration: none; color: white; background: #1e293b; padding: 10px 18px; border-radius: 6px; font-weight: bold; font-size: 0.8rem; border: none; cursor: pointer; flex-shrink: 0; }
+
+        /* Media Query para Ordenador (Desktop) */
+        @media (min-width: 992px) {
+            #laboratorio-completo { flex-direction: row; height: 100vh; }
+            .left { width: 45%; height: 100vh; padding: 40px; }
+            .right { width: 55%; height: 100vh; overflow-y: auto; padding: 50px; }
+            h1 { font-size: 2.5rem; }
+            .item-card { padding: 15px 20px; }
+            .info-title { font-size: 1.1rem; }
+        }
     </style>
 </head>
 <body>
 
-    <audio id="bgMusic" loop preload="auto">
-        <source src="https://www.chosic.com/wp-content/uploads/2021/07/The-Black-Pearl.mp3" type="audio/mpeg">
-    </audio>
-
     <div id="bloqueo">
-        <h1 style="font-size: 1.5rem; color: var(--blue-p); margin-bottom: 10px;">LABORATORIO PIREGAL</h1>
+        <h1 style="color: var(--blue-p); font-size: 1.8rem;">PIREGAL 2026</h1>
+        <p style="color: #64748b;">Acceso de Dirección</p>
         <input type="password" id="pass" class="input-pass" placeholder="Contraseña">
         <button class="btn-verificar" onclick="verificar()">ACCEDER</button>
     </div>
 
     <div id="laboratorio-completo">
         <div class="left">
-            <video id="resiVideo" controls onended="reproducirMusica()">
+            <video id="resiVideo" controls>
                 <source src="resi.mp4" type="video/mp4">
             </video>
-            <p style="margin-top:20px; font-weight:bold;">RESI: Briefing Estratégico</p>
+            <p class="video-label">RESI: BRIEFING ESTRATÉGICO</p>
         </div>
+
         <div class="right">
             <h1>Panel de Control</h1>
+            
             <div class="item-card pildora-nueva">
                 <div class="info-container">
-                    <span style="font-size: 0.8rem; color: var(--danger); font-weight: bold;">● NOVEDAD</span>
-                    <div style="font-size: 1.4rem; font-weight: bold; margin-top: 5px; color: #1e293b;">P03 - Expansión Nacional y Superyachts</div>
+                    <span class="new-tag">● NOVEDAD</span>
+                    <div class="info-title">P03 - Expansión y Superyachts</div>
                 </div>
-                <a href="https://drive.google.com/uc?export=view&id=1d5RDRPoI3cnpQoR1Pn89vdUCt-TKOYnN" target="_blank" class="btn-action">ABRIR PDF</a>
+                <button class="btn-action" onclick="descargarYHablar('https://drive.google.com/uc?export=view&id=1d5RDRPoI3cnpQoR1Pn89vdUCt-TKOYnN', 'Miguel, esta es la hoja de ruta para la conquista del sector náutico. Analizamos la entrada en puertos estratégicos y el protocolo de servicio exclusivo para superyates.')">PDF</button>
             </div>
+
             <div class="item-card">
                 <div class="info-container">
-                    <div style="font-size: 1.2rem; font-weight: bold; color: #1e293b;">P02 - Infraestructura y Células</div>
+                    <div class="info-title">P02 - Infraestructura y Células</div>
                 </div>
-                <a href="https://drive.google.com/uc?export=view&id=15ZUmLkTzVDPV72WZkhthF9WnBxPryJ9u" target="_blank" class="btn-action">ABRIR PDF</a>
+                <button class="btn-action" onclick="descargarYHablar('https://drive.google.com/uc?export=view&id=15ZUmLkTzVDPV72WZkhthF9WnBxPryJ9u', 'En esta píldora definimos la arquitectura operativa y la creación de células autónomas por zona.')">PDF</button>
             </div>
+
             <div class="item-card">
                 <div class="info-container">
-                    <div style="font-size: 1.2rem; font-weight: bold; color: #1e293b;">P01 - Gestión y Control de Rentabilidad</div>
+                    <div class="info-title">P01 - Gestión de Rentabilidad</div>
                 </div>
-                <a href="https://drive.google.com/uc?export=view&id=1hqqUsiZoJXai6PwJvcZ5-S00Gq2Gmq9q" target="_blank" class="btn-action">ABRIR PDF</a>
+                <button class="btn-action" onclick="descargarYHablar('https://drive.google.com/uc?export=view&id=1hqqUsiZoJXai6PwJvcZ5-S00Gq2Gmq9q', 'Sentamos las bases financieras del 2026 con los nuevos protocolos de supervisión de costes operativos.')">PDF</button>
             </div>
         </div>
     </div>
 
     <script>
-        const music = document.getElementById('bgMusic');
-        const video = document.getElementById('resiVideo');
-
         function verificar() {
             const clave = document.getElementById('pass').value;
             if(clave === "Piregal2026") {
-                // Desbloqueamos el audio con la interacción del botón
-                music.play().then(() => {
-                    music.pause();
-                    music.currentTime = 0;
-                }).catch(e => console.log("Esperando fin de video"));
-
                 document.getElementById('bloqueo').style.display = 'none';
-                document.body.style.display = 'block'; 
-                document.getElementById('laboratorio-completo').style.display = 'grid';
-                video.play();
-            } else {
-                alert("Clave incorrecta.");
-            }
+                document.getElementById('laboratorio-completo').style.display = 'flex';
+                document.getElementById('resiVideo').play();
+            } else { alert("Clave incorrecta."); }
         }
 
-        function reproducirMusica() {
-            music.volume = 0.35; 
-            music.play();
+        function descargarYHablar(url, texto) {
+            window.speechSynthesis.cancel();
+            const mensaje = new SpeechSynthesisUtterance(texto);
+            mensaje.lang = 'es-ES';
+            mensaje.rate = 1.0;
+            window.speechSynthesis.speak(mensaje);
+            setTimeout(() => { window.open(url, '_blank'); }, 500);
         }
     </script>
 </body>
