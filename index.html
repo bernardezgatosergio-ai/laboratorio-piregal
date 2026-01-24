@@ -35,7 +35,7 @@
 <body>
 
     <audio id="bgMusic" loop preload="auto">
-        <source src="https://docs.google.com/uc?export=open&id=1nCVW0qZRRyDM97l2wIxHkB1_7PVsW1Nh" type="audio/mpeg">
+        <source src="https://www.chosic.com/wp-content/uploads/2021/07/The-Black-Pearl.mp3" type="audio/mpeg">
     </audio>
 
     <div id="bloqueo">
@@ -82,11 +82,11 @@
         function verificar() {
             const clave = document.getElementById('pass').value;
             if(clave === "Piregal2026") {
-                // Truco de UX: Preparamos el audio en silencio para ganar el permiso del navegador
+                // Desbloqueamos el audio con la interacción del botón
                 music.play().then(() => {
                     music.pause();
                     music.currentTime = 0;
-                }).catch(e => console.log("Permiso de audio pendiente"));
+                }).catch(e => console.log("Esperando fin de video"));
 
                 document.getElementById('bloqueo').style.display = 'none';
                 document.body.style.display = 'block'; 
@@ -104,3 +104,4 @@
     </script>
 </body>
 </html>
+
