@@ -5,96 +5,124 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Laboratorio Piregal 2026</title>
     <style>
-        :root { --blue-p: #004a99; --gold-r: #f39c12; }
+        :root { --blue-p: #004a99; --gold-r: #f39c12; --danger: #e74c3c; }
         body, html { margin: 0; padding: 0; height: 100%; font-family: 'Segoe UI', sans-serif; background: #fff; overflow: hidden; }
         
-        /* Pantalla de Entrada */
-        #splash { position: fixed; width: 100%; height: 100%; background: white; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 1000; }
-        .btn-entrar { padding: 25px 60px; font-size: 1.8rem; color: white; background: var(--blue-p); border: none; border-radius: 50px; cursor: pointer; font-weight: bold; box-shadow: 0 10px 40px rgba(0,74,153,0.3); transition: 0.3s; }
-        .btn-entrar:hover { transform: scale(1.05); }
+        /* Splash Screen */
+        #splash { position: fixed; width: 100%; height: 100%; background: white; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 1000; transition: 0.5s; }
+        .btn-entrar { padding: 25px 60px; font-size: 1.8rem; color: white; background: var(--blue-p); border: none; border-radius: 50px; cursor: pointer; font-weight: bold; box-shadow: 0 10px 40px rgba(0,74,153,0.3); }
 
-        /* Dashboard Partido */
+        /* Dashboard */
         .container { display: none; height: 100vh; grid-template-columns: 1fr 1fr; }
+        .left { background: #f8fafc; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 40px; border-right: 2px solid #eee; }
+        video { width: 100%; max-width: 550px; border-radius: 15px; box-shadow: 0 25px 50px rgba(0,0,0,0.2); background: #000; }
         
-        .left { background: #f8fafc; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 40px; border-right: 2px solid #eee; position: relative; }
-        .left::before { content: "Piregal 2026 / Formula Técnica"; position: absolute; top: 20px; left: 20px; font-size: 0.7rem; color: #cbd5e1; font-family: monospace; }
+        .right { padding: 60px; overflow-y: auto; background: #fff; position: relative; }
         
-        video { width: 100%; max-width: 550px; border-radius: 15px; box-shadow: 0 25px 50px rgba(0,0,0,0.2); background: #000; border: 5px solid white; }
-        
-        .right { padding: 60px; overflow-y: auto; background: url('https://www.transparenttextures.com/patterns/clean-gray-paper.png'); }
-        h1 { color: var(--blue-p); font-size: 2.2rem; margin-bottom: 5px; }
-        .subtitle { color: #64748b; margin-bottom: 40px; font-style: italic; }
+        /* Bloqueo Seguridad */
+        #bloqueo-ceo { background: #fef9e7; border: 2px dashed var(--gold-r); padding: 40px; border-radius: 20px; text-align: center; margin-top: 20px; }
+        .input-pass { padding: 12px; border-radius: 8px; border: 1px solid #cbd5e1; width: 200px; font-size: 1rem; margin-bottom: 15px; text-align: center; }
 
-        .item-card { background: white; border: 1px solid #e2e8f0; padding: 20px; border-radius: 12px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; border-left: 6px solid var(--gold-r); transition: 0.2s; }
-        .item-card:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+        /* Píldoras con Efecto Pulso */
+        #seccion-estrategica { display: none; }
+        .item-card { background: white; border: 1px solid #e2e8f0; padding: 25px; border-radius: 15px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; border-left: 8px solid #cbd5e1; }
         
-        .info-meta { font-size: 0.75rem; color: #94a3b8; text-transform: uppercase; }
-        .info-title { font-size: 1.1rem; font-weight: bold; color: #1e293b; margin-top: 5px; }
-        
-        .btn-action { text-decoration: none; color: white; background: #1e293b; padding: 12px 25px; border-radius: 8px; font-weight: bold; font-size: 0.85rem; transition: 0.2s; }
+        .pildora-nueva { 
+            border-left: 8px solid var(--danger) !important; 
+            animation: pulso-novedad 2s infinite; 
+        }
+        @keyframes pulso-novedad {
+            0% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.4); }
+            70% { box-shadow: 0 0 0 15px rgba(231, 76, 60, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0); }
+        }
+
+        .btn-action { text-decoration: none; color: white; background: #1e293b; padding: 15px 30px; border-radius: 10px; font-weight: bold; }
         .btn-action:hover { background: var(--blue-p); }
     </style>
 </head>
 <body>
 
+    <audio id="bgMusic" loop>
+        <source src="ambiente.mp3" type="audio/mpeg">
+    </audio>
+
     <div id="splash">
-        <div style="font-size: 4rem; margin-bottom: 20px;">🧪</div>
-        <h1>LABORATORIO PIREGAL</h1>
-        <p style="color: #64748b; margin-bottom: 40px;">Estrategia Operativa & Innovación 2026</p>
-        <button class="btn-entrar" onclick="iniciar()">ENTRAR AL SISTEMA</button>
+        <div style="font-size: 5rem; margin-bottom: 20px;">🏴‍☠️</div>
+        <h1 style="color: var(--blue-p); letter-spacing: 2px;">LABORATORIO PIREGAL</h1>
+        <button class="btn-entrar" onclick="iniciar()">TOMAR EL MANDO</button>
     </div>
 
     <div id="dashboard" class="container">
         <div class="left">
-            <video id="resiVideo" controls>
-                <source src="resi.mp4" type="video/mp4">
+            <video id="resiVideo" controls onended="activarEpica()">
+                <source src="Piregal.mp4" type="video/mp4">
             </video>
-            <p style="margin-top:20px; font-weight:bold; color: #1e293b;">RESI: Briefing Estratégico</p>
+            <p style="margin-top:25px; font-weight:bold; font-size: 1.2rem; color: #1e293b;">Briefing de Capitán</p>
         </div>
 
         <div class="right">
-            <h1>Panel de Control</h1>
-            <p class="subtitle">Bienvenido, Miguel. Aquí tienes las fórmulas operativas 2026.</p>
+            <h1 style="margin-top:0;">Panel de Control Estratégico</h1>
             
-            <div id="contenedor-pildoras">
-                <div class="item-card">
-                    <div>
-                        <span class="info-meta">PÍLDORA 01 - Gestión</span>
-                        <div class="info-title">Gestión, Control y Rentabilidad</div>
-                    </div>
-                    <a href="https://drive.google.com/uc?export=view&id=1hqqUsiZoJXai6PwJvcZ5-S00Gq2Gmq9q" target="_blank" class="btn-action">ABRIR PDF</a>
-                </div>
-
-                <div class="item-card">
-                    <div>
-                        <span class="info-meta">PÍLDORA 02 - Operaciones</span>
-                        <div class="info-title">Infraestructura y Células Autónomas</div>
-                    </div>
-                    <a href="https://drive.google.com/uc?export=view&id=15ZUmLkTzVDPV72WZkhthF9WnBxPryJ9u" target="_blank" class="btn-action">ABRIR PDF</a>
-                </div>
-
-                <div class="item-card">
-                    <div>
-                        <span class="info-meta">PÍLDORA 03 - Mercado</span>
-                        <div class="info-title">Expansión Nacional y Superyachts</div>
-                    </div>
-                    <a href="https://drive.google.com/uc?export=view&id=1d5RDRPoI3cnpQoR1Pn89vdUCt-TKOYnN" target="_blank" class="btn-action">ABRIR PDF</a>
-                </div>
+            <div id="bloqueo-ceo">
+                <div style="font-size: 3rem; margin-bottom: 10px;">🔐</div>
+                <h2>Zona de Alta Dirección</h2>
+                <p>La estrategia solo es para quien conoce el rumbo.</p>
+                <input type="password" id="pass" class="input-pass" placeholder="Clave Maestra">
+                <br>
+                <button onclick="verificar()" style="padding: 15px 40px; border-radius: 10px; background: var(--gold-r); border:none; color:white; font-weight:bold; cursor:pointer;">DESBLOQUEAR</button>
             </div>
 
-            <div style="margin-top: 60px; text-align: center; color: #cbd5e1; font-size: 0.7rem; border-top: 1px solid #eee; padding-top: 20px;">
-                SISTEMA OPERATIVO PROPIEDAD DE PIREGAL | 2026
+            <div id="seccion-estrategica">
+                <p style="color: var(--danger); font-weight: bold; letter-spacing: 1px;">⚡ NUEVAS FORMULACIONES DISPONIBLES</p>
+                
+                <div class="item-card pildora-nueva">
+                    <div>
+                        <span style="font-size: 0.8rem; color: var(--danger); font-weight: bold;">[ PRIORIDAD MÁXIMA ]</span>
+                        <div style="font-size: 1.3rem; font-weight: bold; color: #1e293b; margin-top:5px;">P03 - Expansión y Superyachts</div>
+                    </div>
+                    <a href="https://drive.google.com/uc?export=view&id=1d5RDRPoI3cnpQoR1Pn89vdUCt-TKOYnN" target="_blank" class="btn-action">LEER AHORA</a>
+                </div>
+
+                <div class="item-card">
+                    <div><div style="font-size: 1.2rem; font-weight: bold;">P02 - Células Autónomas</div></div>
+                    <a href="https://drive.google.com/uc?export=view&id=15ZUmLkTzVDPV72WZkhthF9WnBxPryJ9u" target="_blank" class="btn-action">REVISAR</a>
+                </div>
+
+                <div class="item-card">
+                    <div><div style="font-size: 1.2rem; font-weight: bold;">P01 - Gestión de Rentabilidad</div></div>
+                    <a href="https://drive.google.com/uc?export=view&id=1hqqUsiZoJXai6PwJvcZ5-S00Gq2Gmq9q" target="_blank" class="btn-action">REVISAR</a>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
+        const music = document.getElementById('bgMusic');
+
         function iniciar() {
-            document.getElementById('splash').style.display = 'none';
-            document.getElementById('dashboard').style.display = 'grid';
-            document.getElementById('resiVideo').play();
+            document.getElementById('splash').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('splash').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'grid';
+                document.getElementById('resiVideo').play();
+            }, 500);
+        }
+
+        function activarEpica() {
+            music.volume = 0.4;
+            music.play();
+        }
+
+        function verificar() {
+            const pass = document.getElementById('pass').value;
+            if(pass === "Piregal2026") {
+                document.getElementById('bloqueo-ceo').style.display = 'none';
+                document.getElementById('seccion-estrategica').style.display = 'block';
+            } else {
+                alert("Rumbo equivocado. Clave incorrecta.");
+            }
         }
     </script>
 </body>
-
 </html>
