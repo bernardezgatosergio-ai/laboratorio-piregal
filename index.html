@@ -8,13 +8,11 @@
         :root { --blue-p: #004a99; --gold-r: #f39c12; --danger: #e74c3c; }
         body, html { margin: 0; padding: 0; height: 100%; font-family: 'Segoe UI', sans-serif; background: #fff; display: flex; justify-content: center; align-items: center; }
         
-        /* Acceso de Seguridad */
         #bloqueo { text-align: center; padding: 40px; border: 1px solid #eee; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); background: white; z-index: 10; width: 350px; }
         .input-pass { padding: 15px; border-radius: 8px; border: 1px solid #ccc; width: 100%; box-sizing: border-box; font-size: 1.1rem; text-align: center; margin-bottom: 20px; outline: none; }
         .btn-verificar { width: 100%; padding: 15px; background: var(--blue-p); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 1rem; }
 
-        /* Contenedor del Laboratorio */
-        #laboratorio-completo { display: none; width: 100%; height: 100vh; grid-template-columns: 1fr 1.3fr; }
+        #laboratorio-completo { display: none; width: 100%; height: 100vh; grid-template-columns: 1fr 1.5fr; } /* Panel derecho más ancho */
         
         .left { background: #f8fafc; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 40px; border-right: 1px solid #eee; }
         video { width: 100%; max-width: 550px; border-radius: 15px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); background: #000; }
@@ -22,30 +20,27 @@
         .right { padding: 60px; overflow-y: auto; background: #fff; box-sizing: border-box; }
         h1 { color: var(--blue-p); font-size: 2.5rem; margin-bottom: 30px; }
 
-        /* Mejora: Tarjeta con diseño flexible y más ancho */
+        /* Mejora definitiva de tarjetas */
         .item-card { 
             background: white; 
             border: 1px solid #e2e8f0; 
-            padding: 25px; 
-            border-radius: 12px; 
-            margin-bottom: 20px; 
+            padding: 30px; 
+            border-radius: 15px; 
+            margin-bottom: 25px; 
             display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            gap: 25px; /* Espacio de seguridad entre texto y botón */
+            flex-direction: column; /* El botón irá debajo si es necesario */
+            align-items: flex-start;
             border-left: 10px solid #cbd5e1; 
             transition: 0.3s;
+            position: relative;
         }
         
-        .info-container { flex: 1; } /* El texto ocupa todo el espacio disponible */
+        .info-container { width: 100%; margin-bottom: 15px; } /* Espacio para el texto */
 
-        .pildora-nueva { 
-            border-left: 10px solid var(--danger) !important; 
-            animation: pulso 2s infinite; 
-        }
+        .pildora-nueva { border-left: 10px solid var(--danger) !important; animation: pulso 2s infinite; }
         @keyframes pulso {
             0% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.4); }
-            70% { box-shadow: 0 0 0 12px rgba(231, 76, 60, 0); }
+            70% { box-shadow: 0 0 0 15px rgba(231, 76, 60, 0); }
             100% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0); }
         }
 
@@ -53,22 +48,22 @@
             text-decoration: none; 
             color: white; 
             background: #1e293b; 
-            padding: 14px 30px; 
+            padding: 15px 40px; 
             border-radius: 8px; 
             font-weight: bold; 
-            white-space: nowrap; /* Evita que el texto del botón se parta */
+            display: inline-block;
+            align-self: flex-end; /* Botón a la derecha */
         }
     </style>
 </head>
 <body>
 
-    <audio id="bgMusic" loop>
-        <source src="https://docs.google.com/uc?export=open&id=1nCVW0qZRRyDM97l2wIxHkB1_7PVsW1Nh" type="audio/mpeg">
+    <audio id="bgMusic" loop preload="auto">
+        <source src="https://drive.google.com/uc?export=download&id=1nCVW0qZRRyDM97l2wIxHkB1_7PVsW1Nh" type="audio/mpeg">
     </audio>
 
     <div id="bloqueo">
         <h1 style="font-size: 1.5rem; color: var(--blue-p); margin-bottom: 10px;">LABORATORIO PIREGAL</h1>
-        <p style="color: #666; margin-bottom: 25px;">Introduzca la clave de Dirección</p>
         <input type="password" id="pass" class="input-pass" placeholder="Contraseña">
         <button class="btn-verificar" onclick="verificar()">ACCEDER</button>
     </div>
@@ -78,17 +73,16 @@
             <video id="resiVideo" controls onended="reproducirMusica()">
                 <source src="resi.mp4" type="video/mp4">
             </video>
-            <p style="margin-top:20px; font-weight:bold; color: #334155;">RESI: Briefing Estratégico</p>
+            <p style="margin-top:20px; font-weight:bold;">RESI: Briefing Estratégico</p>
         </div>
 
         <div class="right">
             <h1>Panel de Control</h1>
-            <p style="color: var(--danger); font-weight: bold; font-size: 0.8rem; letter-spacing: 1px;">● ACTUALIZACIONES ESTRATÉGICAS</p>
             
             <div class="item-card pildora-nueva">
                 <div class="info-container">
-                    <span style="font-size: 0.75rem; color: var(--danger); font-weight: bold;">NUEVA</span>
-                    <div style="font-size: 1.3rem; font-weight: bold; margin-top: 5px; color: #1e293b;">P03 - Expansión Nacional y Superyachts</div>
+                    <span style="font-size: 0.8rem; color: var(--danger); font-weight: bold;">● NOVEDAD</span>
+                    <div style="font-size: 1.4rem; font-weight: bold; margin-top: 5px; color: #1e293b;">P03 - Expansión Nacional y Superyachts</div>
                 </div>
                 <a href="https://drive.google.com/uc?export=view&id=1d5RDRPoI3cnpQoR1Pn89vdUCt-TKOYnN" target="_blank" class="btn-action">ABRIR PDF</a>
             </div>
@@ -126,8 +120,8 @@
         }
 
         function reproducirMusica() {
-            music.volume = 0.35; 
-            music.play();
+            music.volume = 0.4; 
+            music.play().catch(e => console.log("Error de audio:", e));
         }
     </script>
 </body>
