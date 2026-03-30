@@ -1,1 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Piregal - Estimador Técnico 2026</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+        body { font-family: 'Montserrat', sans-serif; background-color: #f8fafc; color: #1e293b; }
+        .input-field { width: 100%; padding: 12px; border: 1px solid #e2e8f0; border-radius: 8px; margin-top: 8px; }
+        .card-calc { background: white; padding: 40px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
+    </style>
+</head>
+<body class="p-4 md:p-12">
 
+    <div class="max-w-3xl mx-auto">
+        <div class="flex justify-between items-center mb-8">
+            <img src="logo-piregal.jpeg" alt="Logo" class="h-16 w-auto">
+            <a href="index.html" class="text-xs font-bold uppercase tracking-widest text-gray-400 hover:text-blue-900">← Volver al Panel</a>
+        </div>
+
+        <div class="card-calc">
+            <h1 class="text-2xl font-bold text-[#722f37] mb-2 uppercase tracking-tighter">Estimador de Presupuesto Técnico</h1>
+            <p class="text-sm text-gray-500 mb-8 font-medium">Cálculo preliminar basado en rendimientos de material y mano de obra especializada.</p>
+
+            <form id="calcForm" class="space-y-6">
+                <div>
+                    <label class="block text-xs font-black uppercase text-gray-400">Superficie Total (m²)</label>
+                    <input type="number" id="area" class="input-field" placeholder="Ej: 100" required>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-black uppercase text-gray-400">Sistema de Pavimento</label>
+                    <select id="sistema" class="input-field">
+                        <option value="45">Naval (IMO/SOLAS Cert.) - 45€/m²</option>
+                        <option value="35">Industrial (High Resistance) - 35€/m²</option>
+                        <option value="60">Lujo/Residencial (Decorative) - 60€/m²</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-black uppercase text-gray-400">Estado del Soporte</label>
+                    <select id="soporte" class="input-field">
+                        <option value="1">Óptimo (Obra nueva / Acero limpio)</option>
+                        <option value="1.2">Medio (Hormigón a granallar)</option>
+                        <option value="1.5">Crítico (Reparación de juntas / Humedad)</option>
+                    </select>
+                </div>
+
+                <button type="button" onclick="calcular()" class="w-full bg-[#722f37] text-white font-bold py-4 rounded-lg hover:bg-black transition-all uppercase tracking-widest">Generar Estimación</button>
+            </form>
+
+            <div id="resultado" class="mt-12 hidden border-t-2 border-dashed border-gray-100 pt-8">
+                <div class="flex justify-between items-end">
+                    <div>
+                        <p class="text-xs font-black uppercase text-gray-400">Inversión Estimada</p>
+                        <h2 id="totalPrice" class="text-5xl font-black text-[#722f37]">0,00€</h2>
+                    </div>
+                    <p class="text-[10px] text-gray-400 max-w-[200px] text-right italic">Sujeto a visita técnica y validación de condiciones de obra.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function calcular() {
+            const area = document.getElementById('area').value;
+            const sistema = document.getElementById('sistema').value;
+            const soporte = document.getElementById('soporte').value;
+
+            if (area > 0) {
+                // Fórmula: Total = Área * PrecioSistema * FactorSoporte
+                const total = area * sistema * soporte;
+                
+                document.getElementById('totalPrice').innerText = total.toLocaleString('es-ES', { style: 'currency', currency: 'EUR' });
+                document.getElementById('resultado').classList.remove('hidden');
+                
+                // Pequeño feedback sonoro/visual si quisiéramos, pero mantenemos el rigor.
+            } else {
+                alert("Por favor, introduce una superficie válida.");
+            }
+        }
+    </script>
+</body>
+</html>
