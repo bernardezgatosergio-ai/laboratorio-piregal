@@ -61,7 +61,7 @@
 </head>
 <body>
 
-    <video autoplay muted loop playsinline id="video-fullbg">
+    <video autoplay muted playsinline id="video-fullbg">
         <source src="resi.mp4" type="video/mp4">
     </video>
 
@@ -75,7 +75,7 @@
 
     <div id="laboratorio-completo">
         <div class="left-panel">
-            <video id="resiVideo-dashboard" loop muted playsinline>
+            <video id="resiVideo-dashboard" muted playsinline>
                 <source src="resi.mp4" type="video/mp4">
             </video>
             <p class="video-label">RESI: BRIEFING ESTRATÉGICO</p>
@@ -124,7 +124,6 @@
 
     <script>
         function entrarAlLab() {
-            // 1. Transición suave para ocultar la landing
             document.getElementById('bienvenida').style.opacity = '0';
             document.getElementById('video-fullbg').style.opacity = '0';
             
@@ -132,35 +131,31 @@
                 document.getElementById('bienvenida').style.display = 'none';
                 document.getElementById('video-fullbg').style.display = 'none';
                 
-                // 2. Mostrar el Dashboard
                 const lab = document.getElementById('laboratorio-completo');
                 lab.style.display = 'flex';
                 setTimeout(() => { lab.style.opacity = '1'; }, 50);
                 
-                // 3. Reproducir el video en el panel izquierdo (como antes)
                 document.getElementById('resiVideo-dashboard').play();
                 
-                // 4. ¡EL ZORRO HABLA AUTOMÁTICAMENTE! 🦊
-                zorroHabla("Bienvenido, Miguel. He activado el Panel de Control. Desde aquí puedes unificar el acceso operativo para nuestros trabajadores o el portal confidencial para nuestros clientes. El rigor es innegociable.");
+                // ACTUALIZACIÓN DE AUDIO DEL ZORRO
+                zorroHabla("Bienvenido al centro operativo de Piregal. Explora nuestras píldoras de conocimiento y accede al sistema de gobernanza para conocer nuestro compromiso.");
 
-            }, 1000); // Esperamos a que termine la transición
+            }, 1000);
         }
 
-        // Función reutilizable para que el Zorro hable
         function zorroHabla(texto) {
-            window.speechSynthesis.cancel(); // Paramos cualquier discurso previo
+            window.speechSynthesis.cancel();
             const mensaje = new SpeechSynthesisUtterance(texto);
-            mensaje.lang = 'es-ES'; // Idioma español
-            mensaje.rate = 1.0; // Velocidad normal
+            mensaje.lang = 'es-ES';
+            mensaje.rate = 1.0;
             window.speechSynthesis.speak(mensaje);
         }
 
-        // Función para pedir contraseña genérica
         function pedirClave(zona) {
             const pass = prompt(`Introduce la clave de Dirección para acceder a [${zona}]:`);
             if (pass === "Piregal2026") {
                 zorroHabla(`Acceso autorizado a la zona de ${zona}.`);
-                alert(`Acceso autorizado a ${zona}. (Aquí iría la redirección real)`);
+                alert(`Acceso autorizado a ${zona}.`);
             } else {
                 zorroHabla("Clave incorrecta. Acceso denegado.");
                 alert("Clave incorrecta.");
