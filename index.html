@@ -3,46 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Laboratorio Piregal 2026</title>
+    <title>Laboratorio Piregal 2026 | Showroom</title>
     <style>
-        :root { --blue-p: #004a99; --danger: #e74c3c; --bg: #f8fafc; --text: #1e293b; }
-        body, html { margin: 0; padding: 0; height: 100%; font-family: 'Segoe UI', sans-serif; background: #fff; color: var(--text); overflow-x: hidden; }
+        :root { --blue-p: #004a99; --danger: #e74c3c; --bg: #f8fafc; --text: #1e293b; --worker-blue: #334155; --client-gold: #b59410; }
+        body, html { margin: 0; padding: 0; min-height: 100%; font-family: 'Segoe UI', sans-serif; background: #fff; color: var(--text); overflow-x: hidden; }
 
-        /* Capa de Video Fondo (Landing) */
-        #video-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1; filter: brightness(0.4); }
+        /* 1. Capa de Video Fondo (Landing - Pantalla Completa Inicial) */
+        #video-fullbg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 10; filter: brightness(0.4); transition: 1s ease; }
 
-        /* Pantalla de Bienvenida (El Zorro) */
-        #bienvenida { display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; text-align: center; color: white; padding: 20px; transition: 0.5s; }
+        /* Pantalla de Bienvenida (El Zorro - Superpuesta al video inicial) */
+        #bienvenida { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; color: white; padding: 20px; z-index: 20; transition: 1s ease; }
         .zorro-box { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); padding: 40px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.2); max-width: 500px; }
         .btn-entrar { margin-top: 20px; padding: 15px 40px; background: white; color: var(--blue-p); border: none; border-radius: 50px; font-weight: bold; cursor: pointer; font-size: 1rem; transition: 0.3s; }
         .btn-entrar:hover { transform: scale(1.05); background: var(--blue-p); color: white; }
 
-        /* Dashboard Principal */
-        #laboratorio-completo { display: none; flex-direction: column; min-height: 100vh; background: #fff; }
-        .header-lab { padding: 30px; border-bottom: 2px solid var(--bg); text-align: center; }
-        .section-title { font-size: 0.8rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 2px; margin: 30px 0 10px 0; font-weight: bold; }
-
-        /* Contenedor de Píldoras */
-        .grid-pildoras { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; padding: 0 20px 40px 20px; max-width: 1200px; margin: 0 auto; }
+        /* 2. Dashboard Principal (Híbrido - Recuperando Split Screen) */
+        #laboratorio-completo { display: none; flex-direction: column; min-height: 100vh; opacity: 0; transition: opacity 1s ease; z-index: 5; }
         
+        /* Sección Izquierda (Video a media pantalla, como antes) */
+        .left-panel { background: #000; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px; box-sizing: border-box; }
+        #resiVideo-dashboard { width: 100%; max-width: 600px; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        .video-label { color: #fff; margin-top: 10px; font-size: 0.9rem; font-weight: bold; letter-spacing: 1px; }
+
+        /* Sección Derecha (Panel de Píldoras) */
+        .right-panel { padding: 20px; box-sizing: border-box; background: #fff; }
+        .header-lab { border-bottom: 2px solid var(--bg); padding-bottom: 10px; margin-bottom: 20px; }
+        .section-title { font-size: 0.75rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 2px; margin: 25px 0 10px 0; font-weight: bold; }
+
+        /* Píldoras Principales de Acceso (Los dos nuevos botones) */
+        .main-access-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 30px; }
+        .btn-main-access { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 20px; border-radius: 10px; font-weight: bold; text-decoration: none; font-size: 1rem; transition: 0.3s; cursor: pointer; border: none; }
+        .btn-main-access:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        
+        .access-worker { background: var(--worker-blue); color: white; }
+        .access-client { background: var(--client-gold); color: white; }
+
+        /* Píldoras Estilo Línea (Restaurado del primer código) */
+        .grid-pildoras { display: flex; flex-direction: column; gap: 10px; }
         .item-card { 
-            background: var(--bg); border: 1px solid #e2e8f0; padding: 15px; border-radius: 12px;
-            display: flex; justify-content: space-between; align-items: center; border-left: 6px solid #cbd5e1; transition: 0.3s;
+            background: var(--bg); border: 1px solid #e2e8f0; padding: 12px 15px; border-radius: 8px;
+            display: flex; justify-content: space-between; align-items: center; border-left: 6px solid #cbd5e1; transition: 0.2s;
         }
-        .item-card:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+        .item-card:hover { border-left-color: var(--blue-p); background: #fff; transform: translateX(3px); }
         .pildora-publica { border-left-color: var(--blue-p); }
         .pildora-privada { border-left-color: #94a3b8; background: #f1f5f9; }
 
         .info-title { font-size: 1rem; font-weight: bold; color: #334155; }
-        .btn-action { text-decoration: none; color: white; background: var(--text); padding: 8px 15px; border-radius: 6px; font-weight: bold; font-size: 0.8rem; border: none; cursor: pointer; }
+        .btn-action { text-decoration: none; color: white; background: #1e293b; padding: 8px 15px; border-radius: 6px; font-weight: bold; font-size: 0.8rem; border: none; cursor: pointer; flex-shrink: 0; }
 
-        /* Media Query Desktop */
-        @media (min-width: 992px) { .header-lab { text-align: left; padding: 50px 50px 20px 50px; } }
+        /* Media Query Desktop (Forzar Split Screen a media pantalla) */
+        @media (min-width: 992px) {
+            #laboratorio-completo { flex-direction: row; height: 100vh; overflow: hidden; }
+            .left-panel { width: 45%; height: 100vh; padding: 40px; }
+            .right-panel { width: 55%; height: 100vh; overflow-y: auto; padding: 50px; }
+        }
     </style>
 </head>
 <body>
 
-    <video autoplay muted loop playsinline id="video-bg">
+    <video autoplay muted loop playsinline id="video-fullbg">
         <source src="resi.mp4" type="video/mp4">
     </video>
 
@@ -55,16 +74,28 @@
     </div>
 
     <div id="laboratorio-completo">
-        <div class="header-lab">
-            <h1 style="color: var(--blue-p); margin:0;">Panel de Control 2026</h1>
-            <p style="color: #64748b;">Ecosistema Digital de Ingeniería</p>
+        <div class="left-panel">
+            <video id="resiVideo-dashboard" loop muted playsinline>
+                <source src="resi.mp4" type="video/mp4">
+            </video>
+            <p class="video-label">RESI: BRIEFING ESTRATÉGICO</p>
         </div>
 
-        <div style="max-width: 1200px; margin: 0 auto; width: 100%;">
-            <div class="section-title" style="padding-left: 20px;">Acceso Abierto</div>
+        <div class="right-panel">
+            <div class="header-lab">
+                <h1 style="color: var(--blue-p); margin:0; font-size: 2rem;">Panel de Control 2026</h1>
+                <p style="color: #64748b;">Ecosistema Digital de Ingeniería</p>
+            </div>
+
+            <div class="main-access-grid">
+                <button class="btn-main-access access-worker" onclick="pedirClave('Trabajadores')">🔒 Acceso a Trabajadores</button>
+                <button class="btn-main-access access-client" onclick="pedirClave('Clientes')">🔒 Acceso a Clientes</button>
+            </div>
+
+            <div class="section-title">Ecosistema Abierto</div>
             <div class="grid-pildoras">
                 <div class="item-card pildora-publica">
-                    <div class="info-title">📸 Galería Visual</div>
+                    <div class="info-title">📸 Galería Visual Super Top</div>
                     <a href="#" class="btn-action">VER</a>
                 </div>
                 <div class="item-card pildora-publica">
@@ -77,15 +108,15 @@
                 </div>
             </div>
 
-            <div class="section-title" style="padding-left: 20px;">Expedientes de Dirección (Privado)</div>
+            <div class="section-title">Expedientes de Dirección (Privado)</div>
             <div class="grid-pildoras">
                 <div class="item-card pildora-privada">
                     <div class="info-title">P03 - Expansión Superyachts</div>
-                    <button class="btn-action" onclick="accesoProtegido('https://drive.google.com/uc?id=...','Mensaje P03')">🔒 PDF</button>
+                    <button class="btn-action" onclick="pedirClave('Expediente P03')">🔒 PDF</button>
                 </div>
                 <div class="item-card pildora-privada">
                     <div class="info-title">P02 - Infraestructura</div>
-                    <button class="btn-action" onclick="accesoProtegido('https://drive.google.com/uc?id=...','Mensaje P02')">🔒 PDF</button>
+                    <button class="btn-action" onclick="pedirClave('Expediente P02')">🔒 PDF</button>
                 </div>
             </div>
         </div>
@@ -93,26 +124,47 @@
 
     <script>
         function entrarAlLab() {
-            document.getElementById('bienvenida').style.display = 'none';
-            document.getElementById('video-bg').style.display = 'none'; // Quitamos el video para ahorrar recursos
-            document.getElementById('laboratorio-completo').style.display = 'flex';
+            // 1. Transición suave para ocultar la landing
+            document.getElementById('bienvenida').style.opacity = '0';
+            document.getElementById('video-fullbg').style.opacity = '0';
+            
+            setTimeout(() => {
+                document.getElementById('bienvenida').style.display = 'none';
+                document.getElementById('video-fullbg').style.display = 'none';
+                
+                // 2. Mostrar el Dashboard
+                const lab = document.getElementById('laboratorio-completo');
+                lab.style.display = 'flex';
+                setTimeout(() => { lab.style.opacity = '1'; }, 50);
+                
+                // 3. Reproducir el video en el panel izquierdo (como antes)
+                document.getElementById('resiVideo-dashboard').play();
+                
+                // 4. ¡EL ZORRO HABLA AUTOMÁTICAMENTE! 🦊
+                zorroHabla("Bienvenido, Miguel. He activado el Panel de Control. Desde aquí puedes unificar el acceso operativo para nuestros trabajadores o el portal confidencial para nuestros clientes. El rigor es innegociable.");
+
+            }, 1000); // Esperamos a que termine la transición
         }
 
-        function accesoProtegido(url, texto) {
-            const pass = prompt("Introduce la clave de Dirección:");
-            if (pass === "Piregal2026") {
-                descargarYHablar(url, texto);
-            } else {
-                alert("Clave incorrecta. Acceso denegado.");
-            }
-        }
-
-        function descargarYHablar(url, texto) {
-            window.speechSynthesis.cancel();
+        // Función reutilizable para que el Zorro hable
+        function zorroHabla(texto) {
+            window.speechSynthesis.cancel(); // Paramos cualquier discurso previo
             const mensaje = new SpeechSynthesisUtterance(texto);
-            mensaje.lang = 'es-ES';
+            mensaje.lang = 'es-ES'; // Idioma español
+            mensaje.rate = 1.0; // Velocidad normal
             window.speechSynthesis.speak(mensaje);
-            setTimeout(() => { window.open(url, '_blank'); }, 500);
+        }
+
+        // Función para pedir contraseña genérica
+        function pedirClave(zona) {
+            const pass = prompt(`Introduce la clave de Dirección para acceder a [${zona}]:`);
+            if (pass === "Piregal2026") {
+                zorroHabla(`Acceso autorizado a la zona de ${zona}.`);
+                alert(`Acceso autorizado a ${zona}. (Aquí iría la redirección real)`);
+            } else {
+                zorroHabla("Clave incorrecta. Acceso denegado.");
+                alert("Clave incorrecta.");
+            }
         }
     </script>
 </body>
