@@ -5,118 +5,115 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Laboratorio Piregal 2026</title>
     <style>
-        :root { --blue-p: #004a99; --danger: #e74c3c; --bg: #f8fafc; }
-        body, html { margin: 0; padding: 0; min-height: 100%; font-family: 'Segoe UI', sans-serif; background: #fff; color: #1e293b; }
+        :root { --blue-p: #004a99; --danger: #e74c3c; --bg: #f8fafc; --text: #1e293b; }
+        body, html { margin: 0; padding: 0; height: 100%; font-family: 'Segoe UI', sans-serif; background: #fff; color: var(--text); overflow-x: hidden; }
+
+        /* Capa de Video Fondo (Landing) */
+        #video-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1; filter: brightness(0.4); }
+
+        /* Pantalla de Bienvenida (El Zorro) */
+        #bienvenida { display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; text-align: center; color: white; padding: 20px; transition: 0.5s; }
+        .zorro-box { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); padding: 40px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.2); max-width: 500px; }
+        .btn-entrar { margin-top: 20px; padding: 15px 40px; background: white; color: var(--blue-p); border: none; border-radius: 50px; font-weight: bold; cursor: pointer; font-size: 1rem; transition: 0.3s; }
+        .btn-entrar:hover { transform: scale(1.05); background: var(--blue-p); color: white; }
+
+        /* Dashboard Principal */
+        #laboratorio-completo { display: none; flex-direction: column; min-height: 100vh; background: #fff; }
+        .header-lab { padding: 30px; border-bottom: 2px solid var(--bg); text-align: center; }
+        .section-title { font-size: 0.8rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 2px; margin: 30px 0 10px 0; font-weight: bold; }
+
+        /* Contenedor de Píldoras */
+        .grid-pildoras { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; padding: 0 20px 40px 20px; max-width: 1200px; margin: 0 auto; }
         
-        /* Pantalla de Bloqueo */
-        #bloqueo { display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; text-align: center; padding: 20px; box-sizing: border-box; }
-        .input-pass { padding: 15px; border-radius: 8px; border: 1px solid #ccc; width: 100%; max-width: 300px; font-size: 1.1rem; text-align: center; margin-bottom: 20px; outline: none; }
-        .btn-verificar { width: 100%; max-width: 300px; padding: 15px; background: var(--blue-p); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
-
-        /* Contenedor Principal Responsive */
-        #laboratorio-completo { display: none; flex-direction: column; min-height: 100vh; }
-        
-        /* Video Section */
-        .left { background: #000; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px; }
-        video { width: 100%; max-width: 600px; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
-        .video-label { color: #fff; margin-top: 10px; font-size: 0.9rem; font-weight: bold; }
-
-        /* Panel de Píldoras Compacto */
-        .right { padding: 20px; box-sizing: border-box; background: #fff; }
-        h1 { color: var(--blue-p); font-size: 1.8rem; margin: 10px 0 20px 0; border-bottom: 2px solid var(--bg); padding-bottom: 10px; }
-
-        /* Píldoras Estilo Línea */
         .item-card { 
-            background: var(--bg); border: 1px solid #e2e8f0; padding: 12px 15px; border-radius: 8px; margin-bottom: 10px; 
-            display: flex; justify-content: space-between; align-items: center; border-left: 6px solid #cbd5e1; transition: 0.2s;
+            background: var(--bg); border: 1px solid #e2e8f0; padding: 15px; border-radius: 12px;
+            display: flex; justify-content: space-between; align-items: center; border-left: 6px solid #cbd5e1; transition: 0.3s;
         }
-        .info-container { flex: 1; padding-right: 15px; overflow: hidden; }
-        .info-title { font-size: 1rem; font-weight: bold; color: #334155; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .new-tag { font-size: 0.65rem; color: var(--danger); font-weight: bold; display: block; margin-bottom: 2px; }
+        .item-card:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+        .pildora-publica { border-left-color: var(--blue-p); }
+        .pildora-privada { border-left-color: #94a3b8; background: #f1f5f9; }
 
-        .pildora-nueva { border-left-color: var(--danger) !important; animation: pulso 2s infinite; }
-        @keyframes pulso {
-            0% { background: var(--bg); }
-            50% { background: #fff1f0; }
-            100% { background: var(--bg); }
-        }
+        .info-title { font-size: 1rem; font-weight: bold; color: #334155; }
+        .btn-action { text-decoration: none; color: white; background: var(--text); padding: 8px 15px; border-radius: 6px; font-weight: bold; font-size: 0.8rem; border: none; cursor: pointer; }
 
-        .btn-action { text-decoration: none; color: white; background: #1e293b; padding: 10px 18px; border-radius: 6px; font-weight: bold; font-size: 0.8rem; border: none; cursor: pointer; flex-shrink: 0; }
-
-        /* Media Query para Ordenador (Desktop) */
-        @media (min-width: 992px) {
-            #laboratorio-completo { flex-direction: row; height: 100vh; }
-            .left { width: 45%; height: 100vh; padding: 40px; }
-            .right { width: 55%; height: 100vh; overflow-y: auto; padding: 50px; }
-            h1 { font-size: 2.5rem; }
-            .item-card { padding: 15px 20px; }
-            .info-title { font-size: 1.1rem; }
-        }
+        /* Media Query Desktop */
+        @media (min-width: 992px) { .header-lab { text-align: left; padding: 50px 50px 20px 50px; } }
     </style>
 </head>
 <body>
 
-    <div id="bloqueo">
-        <h1 style="color: var(--blue-p); font-size: 1.8rem;">PIREGAL 2026</h1>
-        <p style="color: #64748b;">Acceso de Dirección</p>
-        <input type="password" id="pass" class="input-pass" placeholder="Contraseña">
-        <button class="btn-verificar" onclick="verificar()">ACCEDER</button>
+    <video autoplay muted loop playsinline id="video-bg">
+        <source src="resi.mp4" type="video/mp4">
+    </video>
+
+    <div id="bienvenida">
+        <div class="zorro-box">
+            <h1 style="margin:0; font-size: 2.5rem;">PIREGAL 🦊</h1>
+            <p style="opacity: 0.9; margin-top: 10px;">"Bienvenido al núcleo estratégico. Aquí la materia se transforma en rigor técnico."</p>
+            <button class="btn-entrar" onclick="entrarAlLab()">EXPLORAR LABORATORIO</button>
+        </div>
     </div>
 
     <div id="laboratorio-completo">
-        <div class="left">
-            <video id="resiVideo" controls>
-                <source src="resi.mp4" type="video/mp4">
-            </video>
-            <p class="video-label">RESI: BRIEFING ESTRATÉGICO</p>
+        <div class="header-lab">
+            <h1 style="color: var(--blue-p); margin:0;">Panel de Control 2026</h1>
+            <p style="color: #64748b;">Ecosistema Digital de Ingeniería</p>
         </div>
 
-        <div class="right">
-            <h1>Panel de Control</h1>
-            
-            <div class="item-card pildora-nueva">
-                <div class="info-container">
-                    <span class="new-tag">● NOVEDAD</span>
-                    <div class="info-title">P03 - Expansión y Superyachts</div>
+        <div style="max-width: 1200px; margin: 0 auto; width: 100%;">
+            <div class="section-title" style="padding-left: 20px;">Acceso Abierto</div>
+            <div class="grid-pildoras">
+                <div class="item-card pildora-publica">
+                    <div class="info-title">📸 Galería Visual</div>
+                    <a href="#" class="btn-action">VER</a>
                 </div>
-                <button class="btn-action" onclick="descargarYHablar('https://drive.google.com/uc?export=view&id=1d5RDRPoI3cnpQoR1Pn89vdUCt-TKOYnN', 'Miguel, esta es la hoja de ruta para la conquista del sector náutico. Analizamos la entrada en puertos estratégicos y el protocolo de servicio exclusivo para superyates.')">PDF</button>
+                <div class="item-card pildora-publica">
+                    <div class="info-title">🛡️ Sistema de Gobernanza</div>
+                    <a href="https://bernardezgatosergio-ai.github.io/piregal-governance/" target="_blank" class="btn-action">ACCEDER</a>
+                </div>
+                <div class="item-card pildora-publica">
+                    <div class="info-title">🧮 Calculadora de Precios</div>
+                    <a href="#" class="btn-action">CALCULAR</a>
+                </div>
             </div>
 
-            <div class="item-card">
-                <div class="info-container">
-                    <div class="info-title">P02 - Infraestructura y Células</div>
+            <div class="section-title" style="padding-left: 20px;">Expedientes de Dirección (Privado)</div>
+            <div class="grid-pildoras">
+                <div class="item-card pildora-privada">
+                    <div class="info-title">P03 - Expansión Superyachts</div>
+                    <button class="btn-action" onclick="accesoProtegido('https://drive.google.com/uc?id=...','Mensaje P03')">🔒 PDF</button>
                 </div>
-                <button class="btn-action" onclick="descargarYHablar('https://drive.google.com/uc?export=view&id=15ZUmLkTzVDPV72WZkhthF9WnBxPryJ9u', 'En esta píldora definimos la arquitectura operativa y la creación de células autónomas por zona.')">PDF</button>
-            </div>
-
-            <div class="item-card">
-                <div class="info-container">
-                    <div class="info-title">P01 - Gestión de Rentabilidad</div>
+                <div class="item-card pildora-privada">
+                    <div class="info-title">P02 - Infraestructura</div>
+                    <button class="btn-action" onclick="accesoProtegido('https://drive.google.com/uc?id=...','Mensaje P02')">🔒 PDF</button>
                 </div>
-                <button class="btn-action" onclick="descargarYHablar('https://drive.google.com/uc?export=view&id=1hqqUsiZoJXai6PwJvcZ5-S00Gq2Gmq9q', 'Sentamos las bases financieras del 2026 con los nuevos protocolos de supervisión de costes operativos.')">PDF</button>
             </div>
         </div>
     </div>
 
     <script>
-        function verificar() {
-            const clave = document.getElementById('pass').value;
-            if(clave === "Piregal2026") {
-                document.getElementById('bloqueo').style.display = 'none';
-                document.getElementById('laboratorio-completo').style.display = 'flex';
-                document.getElementById('resiVideo').play();
-            } else { alert("Clave incorrecta."); }
+        function entrarAlLab() {
+            document.getElementById('bienvenida').style.display = 'none';
+            document.getElementById('video-bg').style.display = 'none'; // Quitamos el video para ahorrar recursos
+            document.getElementById('laboratorio-completo').style.display = 'flex';
+        }
+
+        function accesoProtegido(url, texto) {
+            const pass = prompt("Introduce la clave de Dirección:");
+            if (pass === "Piregal2026") {
+                descargarYHablar(url, texto);
+            } else {
+                alert("Clave incorrecta. Acceso denegado.");
+            }
         }
 
         function descargarYHablar(url, texto) {
             window.speechSynthesis.cancel();
             const mensaje = new SpeechSynthesisUtterance(texto);
             mensaje.lang = 'es-ES';
-            mensaje.rate = 1.0;
             window.speechSynthesis.speak(mensaje);
             setTimeout(() => { window.open(url, '_blank'); }, 500);
         }
     </script>
 </body>
 </html>
-
